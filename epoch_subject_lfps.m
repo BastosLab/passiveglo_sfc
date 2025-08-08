@@ -1,4 +1,4 @@
-function [subject_series] = epoch_subject(subject_dir, area, interval_tag, prestim, poststim)
+function [subject_series] = epoch_subject_lfps(subject_dir, area, interval_tag, prestim, poststim)
 passive_glo = load([subject_dir, '/', 'passiveglo_task_data.mat']);
 interval_starts = passive_glo.start_time(passive_glo.(interval_tag));
 interval_stops = passive_glo.stop_time(passive_glo.(interval_tag));
