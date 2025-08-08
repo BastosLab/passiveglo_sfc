@@ -1,10 +1,10 @@
-function [data] = populate_ftdata(area, signals, channel_nums, timestamps)
-assert(size(signals, 1) == size(channel_nums, 2));
+function [data] = populate_ftdata(signals, channels, timestamps)
+assert(size(signals, 1) == size(channels, 1));
 
 data = [];
-data.label = cell(size(channel_nums, 2), 1);
-for c=1:size(channel_nums, 2)
-    data.label{c} = [area, '_', int2str(channel_nums(c))];
+data.label = cell(size(channels, 1), 1);
+for c=1:size(channels, 1)
+    data.label{c} = char(string(channels(c)));
 end
 data.time = cell(1, size(signals, 3));
 data.trial = cell(1, size(signals, 3));
