@@ -1,8 +1,4 @@
-function [subject_series] = epoch_subject_lfps(subject_dir, area, interval_tag, prestim, poststim)
-passive_glo = load([subject_dir, '/', 'passiveglo_task_data.mat']);
-interval_starts = passive_glo.start_time(passive_glo.(interval_tag));
-interval_stops = passive_glo.stop_time(passive_glo.(interval_tag));
-
+function [subject_series] = epoch_subject_lfps(subject_dir, area, interval_tag, starts, stops)
 subject_series = [];
 
 probe_nwbs = dir([subject_dir, '/*_probe-*_ecephys.nwb']);
@@ -22,8 +18,8 @@ for probe=1:size(probe_nwbs, 1)
 
        lfp = probe_nwb.acquisition.get(['probe_', int2str(probe-1), '_lfp']).electricalseries.get(['probe_', int2str(probe-1), '_lfp_data']);
        subject_series.timestamps = lfp.timestamps(:);
-       start_samples = nearest_index(subject_series.timestamps, interval_starts - prestim);
-       stop_samples = nearest_index(subject_series.timestamps, interval_stops + poststim);
+       start_samples = nearest_index(subject_series.timestamps, starts);
+       stop_samples = nearest_index(subject_series.timestamps, stops);
        num_samples = round(mean(stop_samples - start_samples));
 
        subject_series.(area) = [];
