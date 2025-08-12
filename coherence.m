@@ -1,10 +1,12 @@
 function [con] = coherence(data)
 cfg = [];
+cfg.foi = 2:2:90;
 cfg.method = 'mtmfft';
-cfg.taper = 'dpss';
-cfg.foilim = [2 90];
-cfg.tapsmofrq = 8;
 cfg.output = 'fourier';
+cfg.pad = 'nextpow2';
+cfg.taper = 'dpss';
+cfg.tapsmofrq = 8;
+
 ft = ft_freqanalysis(cfg, data);
 
 cfg = [];
