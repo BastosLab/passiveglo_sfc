@@ -1,9 +1,15 @@
-function [area_units] = populate_area_units(session_dir, area_channels)
+function [area_units] = populate_area_units(session_dir, area_channels, units_mask)
 ogen_nwbs = dir([session_dir, '/*_ogen.nwb']);
 nwb = nwbRead([session_dir, '/', ogen_nwbs(1).name]);
 unit_channels = nwb.units.vectordata.get("peak_channel_id").data(:);
+if exist('units_mask','var')
+    assert(size(units_mask, 1) == size(unit_channels, 1));
+else
+    units_mask = true(size(unit_channels, 1), 1);
+end
 
 area_units_mask = area_channels.id(1) <= unit_channels & unit_channels <= area_channels.id(end);
+area_units_mask = area_units_mask & units_mask;
 unit_index = 1:size(unit_channels, 1);
 
 area_units = [];
