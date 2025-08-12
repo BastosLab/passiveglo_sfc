@@ -10,4 +10,3 @@ con = coherence(ftdata);
 freqs = con.freq;
 sfc = mean(squeeze(con.cohspctrm(1, :, :)), 1);
 end
-
