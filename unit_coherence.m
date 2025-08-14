@@ -3,7 +3,7 @@ if ~exist('trials', 'var')
     trials = true(size(area.(condition).lfp, 3), 1);
 end
 unit_channel = find(area.channels.id == area.units.channels(unit));
-lfp_channel = max(unit_channel - 10, 1);
+lfp_channel = max(unit_channel + 10, 1);
 
 timeseries = cat(1, area.(condition).lfp(lfp_channel, :, trials), ...
     area.(condition).unit_spikeseries(unit, :, trials));
