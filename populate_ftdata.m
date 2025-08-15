@@ -12,4 +12,6 @@ for tr=1:size(signals, 3)
     data.time{:, tr} = timestamps(:, :, tr);
     data.trial{:, tr} = signals(:, :, tr);
 end
+data.fsample = round(1 / mean(diff(timestamps, 1, 2), [2, 3]));
+data = ft_checkdata(data, 'datatype', 'raw', 'feedback', 'yes');
 end
