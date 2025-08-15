@@ -20,5 +20,14 @@ for i=1:size(interval_tags, 1)
     session.(area).(func2str(interval_tag)).unit_spikeseries = epoch_spikeseries( ...
         session.(area).units, session.timestamps, interval_starts, ...
         interval_stops);
+
+    spikes_per_second = mean(sum(session.(area).(func2str(interval_tag)).unit_spikeseries(:, :, :), ...
+        2), 3) / interval_lengths;
+    accept = spikes_per_second > 1;
+    session.(area).units.id = session.(area).units.id(accept);
+    session.(area).units.channels = session.(area).units.channels(accept);
+    session.(area).units.unit_index = session.(area).units.unit_index(accept);
+    session.(area).units.unit_spike_times = session.(area).units.unit_spike_times(accept);
+    session.(area).(func2str(interval_tag)).unit_spikeseries = session.(area).(func2str(interval_tag)).unit_spikeseries(accept, :, :);
 end
 end
