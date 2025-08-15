@@ -15,6 +15,7 @@ for i=1:size(interval_tags, 1)
     interval_stops = passive_glo.stop_time(interval_tag(passive_glo)) + poststim;
     interval_lengths = mean(interval_stops - interval_starts);
 
+    session.(area).fsample = round(1 / mean(diff(session.timestamps)));
     session.(area).(func2str(interval_tag)) = epoch_subject_lfps(session.(area), ...
         interval_starts, interval_stops);
     session.(area).(func2str(interval_tag)).unit_spikeseries = epoch_spikeseries( ...
