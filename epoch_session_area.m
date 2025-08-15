@@ -11,12 +11,13 @@ passive_glo = load([session_dir, '/', 'passiveglo_task_data.mat']);
 
 for i=1:size(interval_tags, 1)
     interval_tag = interval_tags{i};
-    interval_starts = passive_glo.start_time(passive_glo.(interval_tag)) - prestim;
-    interval_stops = passive_glo.stop_time(passive_glo.(interval_tag)) + poststim;
+    interval_starts = passive_glo.start_time(interval_tag(passive_glo)) - prestim;
+    interval_stops = passive_glo.stop_time(interval_tag(passive_glo)) + poststim;
+    interval_lengths = mean(interval_stops - interval_starts);
 
-    session.(area).(interval_tag) = epoch_subject_lfps(session.(area), ...
+    session.(area).(func2str(interval_tag)) = epoch_subject_lfps(session.(area), ...
         interval_starts, interval_stops);
-    session.(area).(interval_tag).unit_spikeseries = epoch_spikeseries( ...
+    session.(area).(func2str(interval_tag)).unit_spikeseries = epoch_spikeseries( ...
         session.(area).units, session.timestamps, interval_starts, ...
         interval_stops);
 end
