@@ -2,8 +2,6 @@ function [epoched_interval] = epoch_subject_lfps(session_area, starts, stops)
 epoched_interval = [];
 
 probe_nwb = nwbRead(session_area.nwb);
-electrodes = probe_nwb.general_extracellular_ephys_electrodes;
-locations = electrodes.vectordata.get("location").data(:);
 area_locations = session_area.channels.local_index;
 
 lfp = probe_nwb.acquisition.get(['probe_', int2str(session_area.probe-1), ...
