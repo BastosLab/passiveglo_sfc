@@ -1,19 +1,21 @@
-function [coherences] = units_coherence(area, condl, condr)
+function [coherences] = units_coherence(area, conditions)
 coherences = [];
 coherences.unit_ids = area.units.id(:);
-
-avail_trials = min([size(area.(condl).lfp, 3), size(area.(condr).lfp, 3)]);
-condl_trials = randi(size(area.(condl).lfp, 3), [avail_trials, 1]);
-condr_trials = randi(size(area.(condr).lfp, 3), [avail_trials, 1]);
+condition_trial_counts = nan(size(conditions));
+for c=1:size(conditions, 1)
+    condition_trial_counts(c) = size(area.(conditions(c)).lfp, 3);
+end
+avail_trials = min(condition_trial_counts);
 
 coherences.freqs = (2:2:90)';
 coherences.sfc = [];
-coherences.sfc.(condl) = nan(size(coherences.unit_ids, 1), size(coherences.freqs, 1));
-coherences.sfc.(condr) = nan(size(coherences.unit_ids, 1), size(coherences.freqs, 1));
-for u=1:size(coherences.unit_ids, 1)
-    [coherences.freqs, sfc] = unit_coherence(area, u, condl, condl_trials);
-    coherences.sfc.(condl)(u, :) = sfc;
-    [coherences.freqs, sfc] = unit_coherence(area, u, condr, condr_trials);
-    coherences.sfc.(condr)(u, :) = sfc;
+for c=1:size(conditions, 1)
+    cond = conditions(c);
+    cond_trials = randi(size(area.(cond).lfp, 3), [avail_trials, 1]);
+    coherences.sfc.(cond) = nan(size(coherences.unit_ids, 1), size(coherences.freqs, 1));
+    for u=1:size(coherences.unit_ids, 1)
+        [~, sfc] = unit_coherence(area, u, cond, cond_trials);
+        coherences.sfc.(cond)(u, :) = sfc;
+    end
 end
 end
