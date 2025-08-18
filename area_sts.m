@@ -7,6 +7,8 @@ for c=1:size(unitfree_channels, 1)
     end
 end
 
+T = squeeze(mean(area.(condition).timestamps(:, end, :) - area.(condition).timestamps(:, 1, :), 3));
+
 lfp_channels = area.channels.id(unitfree_channels);
 lfp = area.(condition).lfp(unitfree_channels, :, :);
 ftlfp = populate_ftdata(lfp, lfp_channels, area.(condition).timestamps);
@@ -18,8 +20,13 @@ cfg = [];
 cfg.method = 'mtmfft';
 cfg.output = 'pow';
 cfg.foi = foi;
+cfg.pad = 'nextpow2';
 cfg.taper = 'hann';
-cfg.t_ftimwin = 9./cfg.foi;
+cfg.t_ftimwin = 5./cfg.foi;
+cycles_mask = cfg.t_ftimwin <= T;
+cfg.foi = cfg.foi(cycles_mask);
+cfg.t_ftimwin = cfg.t_ftimwin(cycles_mask);
+
 lfp_freqs = ft_freqanalysis(cfg, ftlfp);
 [~, strongest_channel] = max(mean(lfp_freqs.powspctrm, 2));
 
@@ -30,8 +37,12 @@ end
 
 cfg = [];
 cfg.foi = foi;
+cfg.pad = 'nextpow2';
 cfg.taper = 'hann';
-cfg.t_ftimwin = 9./cfg.foi; % 9 cycles per frequency as per the paper
+cfg.t_ftimwin = 5./cfg.foi; % 5 cycles per frequency as per the paper
+cycles_mask = cfg.t_ftimwin <= T;
+cfg.foi = cfg.foi(cycles_mask);
+cfg.t_ftimwin = cfg.t_ftimwin(cycles_mask);
 
 sts = ft_spiketriggeredspectrum_convol(cfg, ftlfp, ftspikeseries);
 sts.spike = ftspikeseries;
