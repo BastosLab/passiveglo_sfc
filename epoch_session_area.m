@@ -6,6 +6,12 @@ if exist('units_mask', 'var')
 else
     session.(area).units = populate_area_units(session_dir, session.(area).channels);
 end
+session.(area).units.location = cell(size(session.(area).units.id, 1), 1);
+for u=1:size(session.(area).units.id, 1)
+    channel = session.(area).units.channels(u);
+    where = session.(area).channels.id == channel;
+    session.(area).units.location{u} = session.(area).channels.location{where};
+end
 
 passive_glo = load([session_dir, '/', 'passiveglo_task_data.mat']);
 
