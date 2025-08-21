@@ -12,7 +12,7 @@ T = squeeze(mean(area.(condition).timestamps(:, end, :) - area.(condition).times
 lfp_channels = area.channels.id(unitfree_channels);
 lfp = area.(condition).lfp(unitfree_channels, :, :);
 ftlfp = populate_ftdata(lfp, lfp_channels, area.(condition).timestamps);
-ftspikeseries = spikeseries_ftdata(area.(condition), area.units.id);
+ftspikeseries = spikeseries_ftdata(area.(condition), area.units.id(area.units.accepted));
 
 % Figure out the strongest channel
 cfg = [];
