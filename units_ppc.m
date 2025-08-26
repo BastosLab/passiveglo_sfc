@@ -14,7 +14,7 @@ for u=1:num_units
     cfg.method = 'ppc1';
     stat_ppc = ft_spiketriggeredspectrum_stat(cfg, sts);
     stats.ppc1(u, :, :) = stat_ppc.ppc1;
-    stats.num_spikes(u, :) = mean(stat_ppc.nspikes, 1);
+    stats.num_spikes(u, :) = mean(stat_ppc.nspikes, [2, 3]);
 end
 end
 
