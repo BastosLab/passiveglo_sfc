@@ -30,9 +30,9 @@ critical_bin = max([round(alpha * permutations), 1]);
 critical_k = ks(critical_bin);
 
 [labels, num_clusters] = spm_bwlabel(significance_real, 18);
-significant = labels;
+significant = significance_real;
 for c=1:num_clusters
-    if sum(abs(s_real.tstat(labels == critical_k)), 'all') < critical_k
+    if sum(abs(s_real.tstat(labels == c)), 'all') < critical_k
         significant(labels == c) = 0;
     end
 end
